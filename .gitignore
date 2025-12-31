@@ -26,6 +26,10 @@ dist-ssr
 # Local .terraform directories
 .terraform/
 
+# Variables
+local.tfvars
+*.local.tfvars
+
 # .tfstate files
 *.tfstate
 *.tfstate.*
