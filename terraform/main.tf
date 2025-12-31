@@ -22,19 +22,34 @@ resource "aws_s3_bucket_public_access_block" "s3-public-access-block" {
   restrict_public_buckets = false
 }
 
+data "aws_iam_policy_document" "s3-website-public-policy-document" {
+  statement {
+    sid = "AllowCloudFrontServiceRead"
+    effect = "Allow"
+
+    principals {
+      type = "Service"
+      identifiers = [ "cloudfront.amazonaws.com" ]
+    }
+
+    actions = [ 
+        "s3:GetObject"
+    ]
+
+    resources = [ 
+        "${aws_s3_bucket.s3-website-bucket.arn}/*"
+    ]
+
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceArn"
+      values   = [aws_cloudfront_distribution.s3-website-distribution.arn]
+    }
+  }
+}
+
 # Allow public access to Get all files in the bucket
 resource "aws_s3_bucket_policy" "s3-website-public-policy" {
   bucket = aws_s3_bucket.s3-website-bucket.id
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Sid    = "PublicReadGetObject"
-        Effect = "Allow"
-        Principal = "*"
-        Action   = "s3:GetObject"
-        Resource = "${aws_s3_bucket.s3-website-bucket.arn}/*"
-      }
-    ]
-  })
+  policy = data.aws_iam_policy_document.s3-website-public-policy-document.json
 }
