@@ -1,4 +1,5 @@
 # AWS S3 hosting + Cloudfront
+![AWS S3 hosting + Cloudfront architecture][arch-image]
 
 ## Cloudfront alternative domains
 To allow alternative domains to be served in cloudfront, the domain will need to be added to `Alternate domain names` for the cloudfront distribution.
@@ -149,3 +150,5 @@ export default defineConfig([
 
 
 ## Setting up Custom domain in cloudflare
+
+[arch-image]: ./docs//architecture.png
