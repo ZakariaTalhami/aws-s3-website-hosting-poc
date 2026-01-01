@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
+import reactLogo from '../../assets/react.svg'
 import viteLogo from '/vite.svg'
-import './App.css'
+import './Page2.css'
 import { useNavigate } from 'react-router'
 
-function App() {
+function Page2() {
   const [count, setCount] = useState(0)
   const navigate = useNavigate();
 
@@ -18,7 +18,7 @@ function App() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>Vite + React</h1>
+      <h1>Vite + React: Page2</h1>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
@@ -31,12 +31,12 @@ function App() {
         Click on the Vite and React logos to learn more
       </p>
       <div>
-        <button onClick={() => navigate("/page2")}>
-          Next Page
+        <button onClick={() => navigate("/")}>
+          Back to Homepage
         </button>
       </div>
     </>
   )
 }
 
-export default App
+export default Page2

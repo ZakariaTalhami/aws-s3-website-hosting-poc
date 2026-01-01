@@ -42,7 +42,6 @@ resource "aws_cloudfront_distribution" "s3-website-distribution" {
     max_ttl                = 0
   }
 
-
   restrictions {
     geo_restriction {
       restriction_type = "none"
@@ -55,4 +54,11 @@ resource "aws_cloudfront_distribution" "s3-website-distribution" {
   }
 
   price_class = "PriceClass_200"
+
+  # This is a hacked solution to resolve react routing in cloudfront
+  custom_error_response {
+    error_code = 403
+    response_code = "200"
+    response_page_path = "/index.html"
+  }
 }

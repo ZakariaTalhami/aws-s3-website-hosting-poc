@@ -11,6 +11,10 @@ resource "aws_s3_bucket_website_configuration" "s3-website-configuration" {
   index_document {
     suffix = "index.html"
   }
+
+  error_document {
+    key = "index.html"
+  }
 }
 
 # Disable the block public protection on the bucket
