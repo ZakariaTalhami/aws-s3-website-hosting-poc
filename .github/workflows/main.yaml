@@ -12,6 +12,7 @@ permissions:
 env:
     TF_LOG: INFO
     ENVIRONMENT: ${{ inputs.environment }}
+    TEST: ${{vars.TEST}}
     AWS_REGION: ${{ secrets.AWS_REGION }}
 jobs:
     deploy:
