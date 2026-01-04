@@ -14,5 +14,6 @@ jobs:
     terraform-prod:
         name: Terraform Prod
         uses: ./.github/workflows/main.yaml
+        secrets: inherit
         with:
             environment: "prod"
