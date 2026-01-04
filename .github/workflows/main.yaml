@@ -85,7 +85,7 @@ jobs:
               run: |
                   terraform plan \
                       -no-color \
-                      -var="domain=${{ secrets.DOMAIN_NAME }}" \
+                      -var="domain=${{ secrets.DOMAIN }}" \
                       -var="app_name=${{ steps.terraform-env.outputs.APP_NAME }}"
 
             - uses: actions/github-script@v6
