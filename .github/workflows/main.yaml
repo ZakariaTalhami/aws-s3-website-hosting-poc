@@ -57,7 +57,7 @@ jobs:
             - name: Setup Terraform Environment
               id: terraform-env
               run: |
-                  APP_NAME= ${{ secrets.APP_NAME }}
+                  APP_NAME="${{ secrets.APP_NAME }}"
 
                   echo "APP_NAME=$APP_NAME"
 
