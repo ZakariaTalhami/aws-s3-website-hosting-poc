@@ -14,5 +14,6 @@ jobs:
     terraform-dev:
         name: Terraform Dev
         uses: ./.github/workflows/main.yaml
+        secrets: inherit
         with:
             environment: "dev"
