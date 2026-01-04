@@ -1,0 +1,15 @@
+name: "Develop Terraform action"
+on:
+    push:
+        branches:
+            - develop
+    pull_request:
+        branches:
+            - develop
+
+jobs:
+    terraform-dev:
+        name: Terraform Dev
+        uses: ./.github/workflows/main.yaml
+        with:
+            environment: "dev"

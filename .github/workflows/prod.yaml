@@ -1,0 +1,15 @@
+name: "Prod Terraform action"
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    terraform-prod:
+        name: Terraform Prod
+        uses: ./.github/workflows/main.yaml
+        with:
+            environment: "prod"
