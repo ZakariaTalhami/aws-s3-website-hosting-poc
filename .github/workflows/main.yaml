@@ -26,6 +26,17 @@ jobs:
             - name: Git checkout
               uses: actions/checkout@v3
 
+            - name: Setup Node
+              uses: actions/setup-node@v6
+              with:
+                node-version: 25
+            
+            - name: Install App Dependencies
+              run: npm ci
+            
+            - name: Build Application
+              run: npm run build
+
             - name: Configure AWS credentials from AWS account
               uses: aws-actions/configure-aws-credentials@v1
               with:
