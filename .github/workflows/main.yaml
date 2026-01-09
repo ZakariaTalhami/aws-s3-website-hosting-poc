@@ -57,7 +57,7 @@ jobs:
               id: init
               env:
                   AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
-                  AWS_BUCKET_KEY_NAME: ${{ secrets.AWS_BUCKET_KEY_NAME }}
+                  AWS_BUCKET_KEY_NAME: "${{github.event.repository.name}}/${{secrets.AWS_REGION}}"
               run: |
                   terraform init \
                       -backend-config="bucket=${AWS_BUCKET_NAME}" \
@@ -71,10 +71,8 @@ jobs:
 
                   echo "APP_NAME=$APP_NAME"
 
-                  # TODO: add env to the end of the workspace
-                  # WORKSPACE="${{github.event.repository.name}}-${{secrets.AWS_REGION}}-${{inputs.environment}}"
-                  WORKSPACE="${{github.event.repository.name}}-${{secrets.AWS_REGION}}-"
-                  
+                  WORKSPACE="${{inputs.environment}}"
+
                   # Add variables to step output context
                   echo "APP_NAME=$APP_NAME" >> $GITHUB_OUTPUT
                   echo "WORKSPACE=$WORKSPACE" >> $GITHUB_OUTPUT
