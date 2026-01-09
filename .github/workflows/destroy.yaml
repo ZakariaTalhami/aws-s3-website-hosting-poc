@@ -1,10 +1,11 @@
-name: "Terraform action"
+name: "Terraform Destroy"
 on:
-    workflow_call:
+    workflow_dispatch:
         inputs:
             environment:
+                description: "The desired Environment to destroy"
                 required: true
-                type: string
+                type: environment
 permissions:
     id-token: write # This is required for aws oidc connection
     contents: read # This is required for actions/checkout
@@ -74,77 +75,17 @@ jobs:
                   # TODO: add env to the end of the workspace
                   # WORKSPACE="${{github.event.repository.name}}-${{secrets.AWS_REGION}}-${{inputs.environment}}"
                   WORKSPACE="${{github.event.repository.name}}-${{secrets.AWS_REGION}}-"
-                  
+
                   # Add variables to step output context
                   echo "APP_NAME=$APP_NAME" >> $GITHUB_OUTPUT
                   echo "WORKSPACE=$WORKSPACE" >> $GITHUB_OUTPUT
 
                   # Select terraform workspace
                   terraform workspace select -or-create=true $WORKSPACE
-            - name: Terraform Validate
-              id: validate
-              run: terraform validate -no-color
-
-            - name: Debug Directories
+           
+            - name: Terraform Destroy
               run: |
-                  ls -l ..
-                  ls -l ../src
-
-            - name: Terraform Plan
-              id: plan
-              if: github.event_name == 'pull_request'
-              continue-on-error: true
-              run: |
-                  terraform plan \
-                      -no-color \
-                      -var="domain=${{ secrets.DOMAIN }}" \
-                      -var="app_name=${{ steps.terraform-env.outputs.APP_NAME }}"
-
-            - uses: actions/github-script@v6
-              if: github.event_name == 'pull_request'
-              env:
-                  PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
-              with:
-                  github-token: ${{ secrets.GITHUB_TOKEN }}
-                  script: |
-                      const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
-                      #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-                      #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
-                      <details><summary>Validation Output</summary>
-
-                      \`\`\`\n
-                      ${{ steps.validate.outputs.stdout }}
-                      \`\`\`
-
-                      </details>
-
-                      #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
-
-                      <details><summary>Show Plan</summary>
-
-                      \`\`\`\n
-                      ${process.env.PLAN}
-                      \`\`\`
-
-                      </details>
-
-                      *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
-
-                      github.rest.issues.createComment({
-                        issue_number: context.issue.number,
-                        owner: context.repo.owner,
-                        repo: context.repo.repo,
-                        body: output
-                      })
-
-            - name: Terraform Plan Status
-              if: steps.plan.outcome == 'failure'
-              run: exit 1
-
-            - name: Terraform Apply
-              if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop') && github.event_name == 'push'
-              run: |
-                  terraform apply \
+                  terraform destroy \
                       -auto-approve \
                       -input=false \
                       -var="domain=${{ secrets.DOMAIN }}" \
