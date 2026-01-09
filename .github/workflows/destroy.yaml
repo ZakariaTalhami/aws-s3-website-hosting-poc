@@ -1,4 +1,4 @@
-name: "Terraform action"
+name: "Terraform Destroy"
 on:
     workflow_dispatch:
         inputs:
