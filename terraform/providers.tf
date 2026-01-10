@@ -17,7 +17,7 @@ provider "aws" {
   region = var.region
 
   dynamic "assume_role" {
-    for_each = var.pave_assume_role ? [1] : []
+    for_each = var.pave_assume_role != nullg ? [1] : []
 
     content {
       role_arn = var.pave_assume_role
