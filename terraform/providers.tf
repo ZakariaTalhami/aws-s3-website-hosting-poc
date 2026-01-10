@@ -4,7 +4,7 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 6.27.0"
     }
-
+  
   }
   backend "s3" {
     bucket = "pizzadev-terraform-state"
@@ -15,4 +15,12 @@ terraform {
 
 provider "aws" {
   region = var.region
+
+  dynamic "assume_role" {
+    for_each = var.pave_assume_role != null ? [1] : []
+
+    content {
+      role_arn = var.pave_assume_role
+    }
+  }
 }
