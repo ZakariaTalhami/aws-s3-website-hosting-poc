@@ -75,10 +75,14 @@ jobs:
 
                   # Add variables to step output context
                   echo "APP_NAME=$APP_NAME" >> $GITHUB_OUTPUT
-                  echo "WORKSPACE=$WORKSPACE" >> $GITHUB_OUTPUT
 
                   # Select terraform workspace
                   terraform workspace select -or-create=true $WORKSPACE
+
+                  # Setup terraform variables
+                  echo "TF_VAR_domain=${{ secrets.DOMAIN }}" >> $GITHUB_ENV
+                  echo "TF_VAR_app_name=${{ secrets.APP_NAME }}" >> $GITHUB_ENV
+                  echo "TF_VAR_pave_assume_role=${{ secrets.AWS_PAVE_ROLE }}" >> $GITHUB_ENV
             - name: Terraform Validate
               id: validate
               run: terraform validate -no-color
@@ -95,8 +99,6 @@ jobs:
               run: |
                   terraform plan \
                       -no-color \
-                      -var="domain=${{ secrets.DOMAIN }}" \
-                      -var="app_name=${{ steps.terraform-env.outputs.APP_NAME }}"
 
             - uses: actions/github-script@v6
               if: github.event_name == 'pull_request'
@@ -145,5 +147,3 @@ jobs:
                   terraform apply \
                       -auto-approve \
                       -input=false \
-                      -var="domain=${{ secrets.DOMAIN }}" \
-                      -var="app_name=${{ steps.terraform-env.outputs.APP_NAME }}"

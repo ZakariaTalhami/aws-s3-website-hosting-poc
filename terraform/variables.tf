@@ -15,3 +15,7 @@ variable "domain" {
 variable "app_name" {
     description = "The application name. Will be used as the CNAME name in DNS"
 }
+
+variable "pave_assume_role" {
+  description = "The AWS role that will be assumed when applying terraform"
+}
